@@ -1,6 +1,5 @@
 // Zadanie 2
 // gra w życie
-// narazie nie działa
 
 int sharex = 50;
 int sharey = 50;
@@ -9,25 +8,25 @@ int [][] nextflatland = new int[sharex][sharey];
 int czas = 500;
 int suma;
 
-//void setup() {
-//  size (550, 550);                                   // rozmiar planszy
-//  for (int i =0; i < sharex; i++)                    
-//    for (int j = 0; j < sharey; j++)
-//      flatland[i][j] = int( random(2));             // początkowe losowanie punktów
-//  czas = millis();
-//}
 void setup() {
-  size (550, 550);
-  flatland[5][8]=1;
-  flatland[6][8]=1;
-  flatland[5][7]=1;
-  flatland[6][7]=1;
+  size (550, 550);                                 // rozmiar planszy
+  for (int i =0; i < sharex; i++)                    
+    for (int j = 0; j < sharey; j++)
+      flatland[i][j] = int( random(2));            // początkowe losowanie punktów
+  czas = millis();
 }
+
+//void setup() {                                   // testowy blinker do testów
+//  size (550, 550);
+//  flatland[5][9]=1;
+//  flatland[5][8]=1;
+//  flatland[5][7]=1;
+//}
+
 void draw() {
-  if (stop(500)){                                 // wywołujemy funkcję mierzącą czas
+  if (stop(500)) {                                 // wywołujemy funkcję mierzącą czas
     changeflatland();
-  }
-  else{
+  } else {
     printflatland();
   }
 }
@@ -58,16 +57,18 @@ void changeflatland() {
 
   for (int i = 1; i< sharex-1; i++) {
     for (int j = 1; j< sharey-1; j++) {
-      suma += flatland[i-1][j] + flatland[i+1][j] + flatland[i][j-1] + flatland[i][j+1] + flatland[i+1][j+1] + flatland[i-1][j-1] + flatland[i+1][j-1] + flatland[i-1][j+1];
-      if ((suma == 2) || (suma == 3)) {
-        nextflatland[i][j] =1;
+      suma = 0;
+      suma += flatland[i-1][j] + flatland[i+1][j] + flatland[i][j-1] + flatland[i][j+1] + flatland[i+1][j+1] + flatland[i-1][j-1] + flatland[i+1][j-1] + flatland[i-1][j+1]; // suma wszystkich 8 pół wokół punktu
+      
+      if (flatland[i][j] ==1  && (suma < 2 || suma > 3)) {
+        nextflatland[i][j] =0;
       }
       if ((flatland[i][j]==0) && (suma ==3)) {
         nextflatland[i][j] = 1;
-      } else {
-        nextflatland[i][j] = 0;
       }
-      suma=0;
+      if (flatland[i][j] ==1  && (suma == 2 || suma == 3)) {
+        nextflatland[i][j] = 1;
+      }
     }
   }
   for (int i = 0; i< sharex; i++) {
